@@ -38,7 +38,7 @@ resource "aws_lb_listener" "alb_listener_http" {
   protocol          = "HTTP"
 
   default_action {
-    order = 1
+    order            = 1
     type             = "forward"
     target_group_arn = aws_lb_target_group.target_group2.arn
   }

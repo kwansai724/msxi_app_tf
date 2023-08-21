@@ -50,3 +50,13 @@ module "alb" {
   project             = var.project
   environment         = var.environment
 }
+
+module "rds" {
+  source               = "./modules/rds"
+  vpc_id               = module.network.vpc_id
+  private_subnet_1a_id = module.network.private_subnet_1a_id
+  private_subnet_1c_id = module.network.private_subnet_1c_id
+  rds_sg_id            = module.sg.rds_sg_id
+  project              = var.project
+  environment          = var.environment
+}
