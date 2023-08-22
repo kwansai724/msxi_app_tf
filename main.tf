@@ -60,3 +60,7 @@ module "rds" {
   project              = var.project
   environment          = var.environment
 }
+
+module "parameter_store" {
+  source = "./modules/parameter_store"
+}

@@ -36,7 +36,7 @@ resource "aws_db_instance" "rds" {
   deletion_protection = false
   skip_final_snapshot = true
 
-  apply_immediately = true
+  apply_immediately     = true
   copy_tags_to_snapshot = true
 
   tags = {
@@ -58,7 +58,7 @@ resource "aws_db_instance" "rds" {
 # RDS subnet group
 # ============================
 resource "aws_db_subnet_group" "subnet_group" {
-  name = "${var.environment}-${var.project}-subnet-group"
+  name        = "${var.environment}-${var.project}-subnet-group"
   description = "maxi_app_subnet_group"
   subnet_ids = [
     var.private_subnet_1a_id,
