@@ -64,3 +64,15 @@ module "rds" {
 module "parameter_store" {
   source = "./modules/parameter_store"
 }
+
+module "ecs" {
+  source              = "./modules/ecs"
+  project             = var.project
+  environment         = var.environment
+  aws_account_id      = var.aws_account_id
+  public_subnet_1a_id = module.network.public_subnet_1a_id
+  public_subnet_1c_id = module.network.public_subnet_1c_id
+  alb_sg_id           = module.sg.alb_sg_id
+  target_group_arn    = module.alb.target_group_arn
+  target_group2_arn   = module.alb.target_group2_arn
+}

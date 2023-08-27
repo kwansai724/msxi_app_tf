@@ -1,0 +1,111 @@
+[
+    {
+        "name": "maxi_app_api",
+        "image": "924338382227.dkr.ecr.ap-northeast-1.amazonaws.com/maxi_app_api:892c43773c3f750764864ce97fde29b5895bf80d",
+        "cpu": 0,
+        "portMappings": [],
+        "essential": true,
+        "environment": [
+            {
+                "name": "RAILS_LOG_TO_STDOUT",
+                "value": "true"
+            },
+            {
+                "name": "RAILS_SERVE_STATIC_FILES\t",
+                "value": "true"
+            },
+            {
+                "name": "RAILS_ENV",
+                "value": "production"
+            }
+        ],
+        "mountPoints": [
+            {
+                "sourceVolume": "public",
+                "containerPath": "/maxi_app/public",
+                "readOnly": false
+            },
+            {
+                "sourceVolume": "tmp",
+                "containerPath": "/maxi_app/tmp",
+                "readOnly": false
+            }
+        ],
+        "volumesFrom": [],
+        "secrets": [
+            {
+                "name": "DB_HOST",
+                "valueFrom": "/maxi_app/db_host"
+            },
+            {
+                "name": "DB_PASSWORD",
+                "valueFrom": "/maxi_app/db_password"
+            },
+            {
+                "name": "DB_USERNAME",
+                "valueFrom": "/maxi_app/db_username"
+            },
+            {
+                "name": "MY_EMAIL",
+                "valueFrom": "/maxi_app/my_email"
+            },
+            {
+                "name": "MY_PASSWORD",
+                "valueFrom": "/maxi_app/my_password"
+            },
+            {
+                "name": "RAILS_MASTER_KEY",
+                "valueFrom": "/maxi_app/master_key"
+            }
+        ],
+        "logConfiguration": {
+            "logDriver": "awslogs",
+            "options": {
+                "awslogs-create-group": "true",
+                "awslogs-group": "/ecs/maxi_app_task",
+                "awslogs-region": "ap-northeast-1",
+                "awslogs-stream-prefix": "ecs"
+            }
+        }
+    },
+    {
+        "name": "maxi_app_nginx",
+        "image": "924338382227.dkr.ecr.ap-northeast-1.amazonaws.com/maxi_app_nginx:892c43773c3f750764864ce97fde29b5895bf80d",
+        "cpu": 0,
+        "portMappings": [
+            {
+                "containerPort": 80,
+                "hostPort": 80,
+                "protocol": "tcp"
+            }
+        ],
+        "essential": true,
+        "environment": [
+            {
+                "name": "ENVIRONMENT",
+                "value": "prd"
+            }
+        ],
+        "mountPoints": [
+            {
+                "sourceVolume": "public",
+                "containerPath": "/maxi_app/public",
+                "readOnly": false
+            },
+            {
+                "sourceVolume": "tmp",
+                "containerPath": "/maxi_app/tmp",
+                "readOnly": false
+            }
+        ],
+        "volumesFrom": [],
+        "logConfiguration": {
+            "logDriver": "awslogs",
+            "options": {
+                "awslogs-group": "/ecs/maxi_app_task",
+                "awslogs-region": "ap-northeast-1",
+                "awslogs-stream-prefix": "ecs"
+            }
+        }
+    }
+]
