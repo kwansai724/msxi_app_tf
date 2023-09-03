@@ -1,7 +1,7 @@
 [
     {
         "name": "maxi_app_api",
-        "image": "924338382227.dkr.ecr.ap-northeast-1.amazonaws.com/maxi_app_api:892c43773c3f750764864ce97fde29b5895bf80d",
+        "image": "${aws_account_id}.dkr.ecr.ap-northeast-1.amazonaws.com/maxi_app_api:892c43773c3f750764864ce97fde29b5895bf80d",
         "cpu": 0,
         "portMappings": [],
         "essential": true,
@@ -70,7 +70,7 @@
     },
     {
         "name": "maxi_app_nginx",
-        "image": "924338382227.dkr.ecr.ap-northeast-1.amazonaws.com/maxi_app_nginx:892c43773c3f750764864ce97fde29b5895bf80d",
+        "image": "${aws_account_id}.dkr.ecr.ap-northeast-1.amazonaws.com/maxi_app_nginx:892c43773c3f750764864ce97fde29b5895bf80d",
         "cpu": 0,
         "portMappings": [
             {

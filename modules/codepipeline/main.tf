@@ -5,7 +5,7 @@ resource "aws_iam_role" "codepipeline_role" {
   name               = "AWSCodePipelineServiceRole-ap-northeast-1-maxi_app_pipeline"
   assume_role_policy = data.aws_iam_policy_document.codepipeline_assume_role.json
   managed_policy_arns = [
-    "arn:aws:iam::924338382227:policy/service-role/AWSCodePipelineServiceRole-ap-northeast-1-maxi_app_pipeline",
+    "arn:aws:iam::${var.aws_account_id}:policy/service-role/AWSCodePipelineServiceRole-ap-northeast-1-maxi_app_pipeline",
   ]
   path = "/service-role/"
 }
@@ -41,14 +41,14 @@ resource "aws_iam_role" "codebuild_role" {
   )
   force_detach_policies = false
   managed_policy_arns = [
-    "arn:aws:iam::924338382227:policy/ecs-task-execution-policy",
-    "arn:aws:iam::924338382227:policy/service-role/CodeBuildBasePolicy-maxi_app_api_codebuild-ap-northeast-1",
-    "arn:aws:iam::924338382227:policy/service-role/CodeBuildBasePolicy-maxi_app_nginx_codebuild-ap-northeast-1",
-    "arn:aws:iam::924338382227:policy/service-role/CodeBuildBasePolicy-maxi_app_rails_migration_codebuild-ap-northeast-1",
-    "arn:aws:iam::924338382227:policy/service-role/CodeBuildManagedSecretPolicy-maxi_app_api_codebuild-ap-northeast-1",
-    "arn:aws:iam::924338382227:policy/service-role/CodeBuildManagedSecretPolicy-maxi_app_nginx_codebuild-ap-northeast-1",
-    "arn:aws:iam::924338382227:policy/service-role/CodeBuildManagedSecretPolicy-maxi_app_rails_migration_codebuild-ap-northeast-1",
-    "arn:aws:iam::924338382227:policy/service-role/CodeBuildVpcPolicy-maxi_app_rails_migration_codebuild-ap-northeast-1",
+    "arn:aws:iam::${var.aws_account_id}:policy/ecs-task-execution-policy",
+    "arn:aws:iam::${var.aws_account_id}:policy/service-role/CodeBuildBasePolicy-maxi_app_api_codebuild-ap-northeast-1",
+    "arn:aws:iam::${var.aws_account_id}:policy/service-role/CodeBuildBasePolicy-maxi_app_nginx_codebuild-ap-northeast-1",
+    "arn:aws:iam::${var.aws_account_id}:policy/service-role/CodeBuildBasePolicy-maxi_app_rails_migration_codebuild-ap-northeast-1",
+    "arn:aws:iam::${var.aws_account_id}:policy/service-role/CodeBuildManagedSecretPolicy-maxi_app_api_codebuild-ap-northeast-1",
+    "arn:aws:iam::${var.aws_account_id}:policy/service-role/CodeBuildManagedSecretPolicy-maxi_app_nginx_codebuild-ap-northeast-1",
+    "arn:aws:iam::${var.aws_account_id}:policy/service-role/CodeBuildManagedSecretPolicy-maxi_app_rails_migration_codebuild-ap-northeast-1",
+    "arn:aws:iam::${var.aws_account_id}:policy/service-role/CodeBuildVpcPolicy-maxi_app_rails_migration_codebuild-ap-northeast-1",
     "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser",
   ]
   max_session_duration = 3600
@@ -62,7 +62,7 @@ resource "aws_iam_role" "codebuild_role" {
           {
             Action   = "ecs:RunTask"
             Effect   = "Allow"
-            Resource = "arn:aws:ecs:*:924338382227:task-definition/*"
+            Resource = "arn:aws:ecs:*:${var.aws_account_id}:task-definition/*"
             Sid      = "VisualEditor0"
           },
         ]
@@ -104,7 +104,7 @@ resource "aws_iam_role" "codebuild_role" {
               }
             }
             Effect   = "Allow"
-            Resource = "arn:aws:ec2:ap-northeast-1:924338382227:network-interface/*"
+            Resource = "arn:aws:ec2:ap-northeast-1:${var.aws_account_id}:network-interface/*"
           },
         ]
         Version = "2012-10-17"
@@ -119,7 +119,7 @@ resource "aws_iam_role" "codebuild_role" {
           {
             Action   = "ssm:GetParameters"
             Effect   = "Allow"
-            Resource = "arn:aws:ssm:*:924338382227:parameter/*"
+            Resource = "arn:aws:ssm:*:${var.aws_account_id}:parameter/*"
             Sid      = "VisualEditor0"
           },
         ]
@@ -169,7 +169,7 @@ resource "aws_codebuild_project" "api_codebuild" {
   name               = "maxi_app_api_codebuild"
   badge_enabled      = false
   build_timeout      = 60
-  encryption_key     = "arn:aws:kms:ap-northeast-1:924338382227:alias/aws/s3"
+  encryption_key     = "arn:aws:kms:ap-northeast-1:${var.aws_account_id}:alias/aws/s3"
   project_visibility = "PRIVATE"
   queued_timeout     = 480
   service_role       = aws_iam_role.codebuild_role.arn
@@ -205,7 +205,7 @@ resource "aws_codebuild_project" "api_codebuild" {
     environment_variable {
       name  = "AWS_ACCOUNT_ID"
       type  = "PLAINTEXT"
-      value = "924338382227"
+      value = var.aws_account_id
     }
     environment_variable {
       name  = "DOCKERHUB_USER"
@@ -247,7 +247,7 @@ resource "aws_codebuild_project" "nginx_codebuild" {
   name               = "maxi_app_nginx_codebuild"
   badge_enabled      = false
   build_timeout      = 60
-  encryption_key     = "arn:aws:kms:ap-northeast-1:924338382227:alias/aws/s3"
+  encryption_key     = "arn:aws:kms:ap-northeast-1:${var.aws_account_id}:alias/aws/s3"
   project_visibility = "PRIVATE"
   queued_timeout     = 480
   service_role       = aws_iam_role.codebuild_role.arn
@@ -283,7 +283,7 @@ resource "aws_codebuild_project" "nginx_codebuild" {
     environment_variable {
       name  = "AWS_ACCOUNT_ID"
       type  = "PLAINTEXT"
-      value = "924338382227"
+      value = var.aws_account_id
     }
     environment_variable {
       name  = "DOCKERHUB_USER"
@@ -322,13 +322,13 @@ resource "aws_codebuild_project" "nginx_codebuild" {
 }
 
 resource "aws_codebuild_project" "rails_migration_codebuild" {
-  name                   = "maxi_app_rails_migration_codebuild"
-  badge_enabled          = false
-  build_timeout          = 60
-  encryption_key         = "arn:aws:kms:ap-northeast-1:924338382227:alias/aws/s3"
-  project_visibility     = "PRIVATE"
-  queued_timeout         = 480
-  service_role           = aws_iam_role.codebuild_role.arn
+  name               = "maxi_app_rails_migration_codebuild"
+  badge_enabled      = false
+  build_timeout      = 60
+  encryption_key     = "arn:aws:kms:ap-northeast-1:${var.aws_account_id}:alias/aws/s3"
+  project_visibility = "PRIVATE"
+  queued_timeout     = 480
+  service_role       = aws_iam_role.codebuild_role.arn
 
   artifacts {
     encryption_disabled    = false
@@ -358,7 +358,7 @@ resource "aws_codebuild_project" "rails_migration_codebuild" {
     environment_variable {
       name  = "AWS_ACCOUNT_ID"
       type  = "PLAINTEXT"
-      value = "924338382227"
+      value = var.aws_account_id
     }
     environment_variable {
       name  = "CLUSTER_NAME"

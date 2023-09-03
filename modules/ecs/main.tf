@@ -40,8 +40,13 @@ resource "aws_ecs_cluster_capacity_providers" "cluster_capacity_providers" {
 # ECS Task Definition
 # ============================
 resource "aws_ecs_task_definition" "ecs_task" {
-  family                = "maxi_app_task"
-  container_definitions = file("modules/ecs/tamplates/ecs_task_definition.json")
+  family = "maxi_app_task"
+  container_definitions = templatefile(
+    "modules/ecs/tamplates/ecs_task_definition.json",
+    {
+      aws_account_id = var.aws_account_id
+    }
+  )
 
   cpu          = "256"
   memory       = "512"

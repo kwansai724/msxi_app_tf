@@ -6,6 +6,10 @@ variable "environment" {
   type = string
 }
 
+variable "aws_account_id" {
+  type = string
+}
+
 variable "public_subnet_1a_arn" {
   type = string
 }
