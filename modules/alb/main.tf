@@ -1,4 +1,24 @@
 # ============================
+# S3 Bucket
+# ============================
+resource "aws_s3_bucket" "alb-access-logs" {
+  bucket = "alb-access-logs-for-kwansai724"
+}
+
+resource "aws_s3_bucket_public_access_block" "alb-access-logs" {
+  bucket                  = aws_s3_bucket.alb-access-logs.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_policy" "alb-access-logs" {
+  bucket = aws_s3_bucket.alb-access-logs.id
+  policy = file("modules/alb/templates/alb-access-logs.json")
+}
+
+# ============================
 # ALB
 # ============================
 resource "aws_lb" "alb" {
@@ -14,7 +34,7 @@ resource "aws_lb" "alb" {
   ]
 
   access_logs {
-    bucket  = "alb-access-logs-for-kwansai724"
+    bucket  = aws_s3_bucket.alb-access-logs.bucket
     enabled = false
     prefix  = "maxi-app-alb-logs"
   }

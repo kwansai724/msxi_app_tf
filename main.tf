@@ -76,3 +76,14 @@ module "ecs" {
   target_group_arn    = module.alb.target_group_arn
   target_group2_arn   = module.alb.target_group2_arn
 }
+
+module "codepipeline" {
+  source               = "./modules/codepipeline"
+  project              = var.project
+  environment          = var.environment
+  public_subnet_1a_arn = module.network.public_subnet_1a_arn
+  public_subnet_1c_arn = module.network.public_subnet_1c_arn
+  public_subnet_1a_id = module.network.public_subnet_1a_id
+  public_subnet_1c_id = module.network.public_subnet_1c_id
+  github_settings      = var.github_settings
+}
