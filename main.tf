@@ -50,3 +50,41 @@ module "alb" {
   project             = var.project
   environment         = var.environment
 }
+
+module "rds" {
+  source               = "./modules/rds"
+  vpc_id               = module.network.vpc_id
+  private_subnet_1a_id = module.network.private_subnet_1a_id
+  private_subnet_1c_id = module.network.private_subnet_1c_id
+  rds_sg_id            = module.sg.rds_sg_id
+  project              = var.project
+  environment          = var.environment
+}
+
+module "parameter_store" {
+  source = "./modules/parameter_store"
+}
+
+module "ecs" {
+  source              = "./modules/ecs"
+  project             = var.project
+  environment         = var.environment
+  aws_account_id      = var.aws_account_id
+  public_subnet_1a_id = module.network.public_subnet_1a_id
+  public_subnet_1c_id = module.network.public_subnet_1c_id
+  alb_sg_id           = module.sg.alb_sg_id
+  target_group_arn    = module.alb.target_group_arn
+  target_group2_arn   = module.alb.target_group2_arn
+}
+
+module "codepipeline" {
+  source               = "./modules/codepipeline"
+  project              = var.project
+  environment          = var.environment
+  aws_account_id       = var.aws_account_id
+  public_subnet_1a_arn = module.network.public_subnet_1a_arn
+  public_subnet_1c_arn = module.network.public_subnet_1c_arn
+  public_subnet_1a_id  = module.network.public_subnet_1a_id
+  public_subnet_1c_id  = module.network.public_subnet_1c_id
+  github_settings      = var.github_settings
+}
